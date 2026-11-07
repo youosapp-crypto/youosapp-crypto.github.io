@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Du är inbjuden till YOU OS</title>
-<meta name="description" content="Någon har en plats i YOU OS åt dig.">
+<meta name="description" content="Någon har sparat en plats i YOU OS åt dig.">
 <meta property="og:title" content="Du är inbjuden till YOU OS">
 <meta property="og:description" content="Ditt liv, vackert organiserat. Tryck för att ta din plats.">
 <meta property="og:image" content="https://youosapp.com/pebble.png">
@@ -15,84 +15,104 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Newsreader:ital,opsz,wght@1,6..72,300&display=swap" rel="stylesheet">
 <style>
-  /* Den personliga inbjudan: youosapp.com/k?c=KOD. Två lugna steg, sedan nedladdningen. */
+  /* Den personliga inbjudan: youosapp.com/k?c=KOD. Samma stil som startsidan: DM Sans, en kursiv rad i Newsreader, pebblen och ljuset. */
   :root { --bg:#F6F2EC; --raised:#FFFDFA; --line:#E4DACD; --text:#4A4038; --soft:#8F8780; --aura:#E2C8B0; --auraStrong:#D8B291; }
   * { box-sizing:border-box; }
   html, body { height:100%; }
   body { margin:0; background:var(--bg); color:var(--text); font-family:'DM Sans',system-ui,sans-serif; line-height:1.6; -webkit-font-smoothing:antialiased; overflow-x:hidden; }
-  .glow { position:fixed; left:50%; top:38%; width:900px; height:900px; transform:translate(-50%,-50%); border-radius:50%;
-          background:radial-gradient(circle, rgba(226,200,176,.5) 0%, rgba(226,200,176,.16) 38%, rgba(246,242,236,0) 68%);
+  .glow { position:fixed; left:50%; top:30%; width:900px; height:900px; transform:translate(-50%,-50%); border-radius:50%;
+          background:radial-gradient(circle, rgba(226,200,176,.55) 0%, rgba(226,200,176,.18) 38%, rgba(246,242,236,0) 68%);
           animation:glow 9s ease-in-out infinite; pointer-events:none; z-index:0; }
   @keyframes glow { 0%,100% { opacity:.75; transform:translate(-50%,-50%) scale(1); } 50% { opacity:1; transform:translate(-50%,-50%) scale(1.06); } }
-  main { position:relative; z-index:1; max-width:460px; margin:0 auto; padding:max(40px, env(safe-area-inset-top)) 28px max(36px, env(safe-area-inset-bottom));
-         min-height:100%; display:flex; flex-direction:column; }
-  .step { flex:1; display:flex; flex-direction:column; }
-  .center { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; }
-  .pebble { width:120px; height:120px; margin-bottom:40px; animation:breathe 6s ease-in-out infinite; filter:drop-shadow(0 26px 44px rgba(184,150,120,.35)); }
+  main { position:relative; z-index:1; max-width:520px; margin:0 auto; padding:max(48px, env(safe-area-inset-top)) 24px 40px; min-height:100%;
+         display:flex; flex-direction:column; align-items:center; text-align:center; }
+  .brand { font-size:13px; letter-spacing:.32em; color:var(--soft); margin:0; }
+  .pebble { width:148px; height:148px; margin:48px 0 36px; animation:breathe 6s ease-in-out infinite; filter:drop-shadow(0 30px 50px rgba(184,150,120,.35)); }
   .pebble img { width:100%; height:100%; display:block; }
   @keyframes breathe { 0%,100% { transform:scale(1) translateY(0); } 50% { transform:scale(1.04) translateY(-4px); } }
-  h1 { font-family:'Newsreader',Georgia,serif; font-weight:300; font-size:38px; line-height:1.15; letter-spacing:-.01em; margin:0; text-wrap:balance; }
-  h1 em { font-style:italic; color:#9C7E62; }
-  .rows { flex:1; display:flex; flex-direction:column; justify-content:center; gap:30px; }
-  .row { display:flex; gap:18px; align-items:flex-start; }
-  .row svg { flex:none; width:24px; height:24px; margin-top:2px; stroke:var(--soft); }
-  .row b { display:block; font-weight:500; font-size:17px; }
-  .row span { color:var(--soft); font-size:15.5px; }
-  .btn { display:flex; align-items:center; justify-content:center; width:100%; height:56px; border:0; border-radius:999px; background:var(--text); color:var(--raised);
-         font:inherit; font-size:16px; font-weight:500; text-decoration:none; cursor:pointer; box-shadow:0 12px 36px rgba(74,64,56,.18); }
+  h1 { font-weight:300; font-size:38px; line-height:1.1; letter-spacing:-.03em; margin:0; text-wrap:balance; }
+  h1 em { display:block; font-family:'Newsreader',Georgia,serif; font-style:italic; font-weight:300; font-size:44px; line-height:1.1; letter-spacing:-.02em; color:#9C7E62; margin-top:6px; }
+  .lead { margin:18px 0 0; color:var(--soft); font-size:16px; }
+
+  /* Koden, som en liten biljett. */
+  .ticket { width:100%; margin-top:36px; background:rgba(255,253,250,.85); border:1px solid var(--line); border-radius:24px; padding:22px 20px 20px;
+            box-shadow:0 18px 50px rgba(74,64,56,.07); -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); }
+  .ticket .label { margin:0; font-size:12px; letter-spacing:.24em; color:var(--soft); }
+  .ticket .code { margin:6px 0 2px; font-weight:300; font-size:30px; letter-spacing:.14em; }
+  .ticket .from { margin:0; font-size:14px; color:var(--soft); }
+
+  .rows { width:100%; margin-top:28px; text-align:left; display:flex; flex-direction:column; gap:18px; }
+  .row { display:flex; gap:16px; align-items:flex-start; }
+  .row svg { flex:none; width:22px; height:22px; margin-top:2px; stroke:#9C7E62; }
+  .row b { display:block; font-weight:500; font-size:16px; }
+  .row span { color:var(--soft); font-size:15px; }
+
+  .btn { display:flex; align-items:center; justify-content:center; width:100%; height:56px; margin-top:32px; border:0; border-radius:999px; background:var(--text); color:var(--raised);
+         font:inherit; font-size:16px; font-weight:500; text-decoration:none; cursor:pointer; box-shadow:0 10px 34px rgba(74,64,56,.22); transition:transform .2s ease, box-shadow .2s ease; }
   .btn:active { transform:scale(.98); }
-  .fine { margin:14px 0 0; text-align:center; font-size:13.5px; color:var(--soft); }
-  .fine a { color:var(--text); }
-  .code { font-weight:500; letter-spacing:.12em; color:var(--text); }
+  .fine { font-size:13px; color:var(--soft); margin:14px 0 0; }
+  .fine a { color:var(--text); text-decoration:none; border-bottom:1px solid var(--auraStrong); }
+  footer { margin-top:auto; padding-top:48px; display:flex; gap:18px; flex-wrap:wrap; justify-content:center; font-size:13px; }
+  footer a { color:var(--soft); text-decoration:none; }
+
   .rise { opacity:0; transform:translateY(10px); animation:rise .9s cubic-bezier(.2,.7,.2,1) forwards; }
-  .d1 { animation-delay:.1s; } .d2 { animation-delay:.4s; } .d3 { animation-delay:.7s; } .d4 { animation-delay:1s; }
+  .d1 { animation-delay:.15s; } .d2 { animation-delay:.45s; } .d3 { animation-delay:.8s; } .d4 { animation-delay:1.15s; } .d5 { animation-delay:1.5s; }
   @keyframes rise { to { opacity:1; transform:none; } }
   [hidden] { display:none !important; }
+  @media (min-width:900px) { h1 { font-size:52px; } h1 em { font-size:60px; } }
+  @media (max-width:400px) { h1 { font-size:32px; } h1 em { font-size:36px; } .pebble { width:128px; height:128px; margin:40px 0 28px; } }
   @media (prefers-reduced-motion: reduce) { .glow, .pebble { animation:none; } .rise { animation:none; opacity:1; transform:none; } }
 </style>
 </head>
 <body>
 <div class="glow" aria-hidden="true"></div>
 <main>
-  <!-- Steg 1: vem som bjudit in. -->
-  <section class="step" id="s1">
-    <div class="center">
-      <div class="pebble rise d1" aria-hidden="true"><img src="pebble.png" alt=""></div>
-      <h1 class="rise d2" id="hello">Välkommen.<br><em>Du är inbjuden till YOU OS.</em></h1>
-    </div>
-    <button class="btn rise d3" id="start" type="button">Kom igång</button>
-  </section>
+  <p class="brand rise d1">YOU OS</p>
+  <div class="pebble rise d1" aria-hidden="true"><img src="pebble.png" alt=""></div>
 
-  <!-- Steg 2: tre saker att veta, och nedladdningen. -->
-  <section class="step" id="s2" hidden>
-    <div class="rows">
-      <div class="row rise d1">
+  <!-- Inbjudan med plats kvar. -->
+  <section id="ok" style="width:100%">
+    <h1 class="rise d2" id="hello">Du är inbjuden.<em>Ta din plats.</em></h1>
+    <p class="lead rise d3">Ditt liv, vackert organiserat på ett ställe.</p>
+
+    <div class="ticket rise d3">
+      <p class="label">DIN KOD</p>
+      <p class="code" id="codeShow"></p>
+      <p class="from" id="from">Gäller för en person</p>
+    </div>
+
+    <div class="rows rise d4">
+      <div class="row">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.6L20 9.4l-4 4 1 5.6-5-2.8-5 2.8 1-5.6-4-4 5.4-.8z"/></svg>
         <div><b>Bara för inbjudna</b><span>YOU OS är i en sluten beta. Du har fått en av platserna.</span></div>
       </div>
-      <div class="row rise d2">
+      <div class="row">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg>
         <div><b>Din data är din</b><span>Du bestämmer vad YOU OS får se, och kan radera allt när du vill.</span></div>
       </div>
-      <div class="row rise d3">
+      <div class="row">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="13" rx="2"/><path d="M12 8v13M3 12h18M12 8c-2-3-6-3-6 0M12 8c2-3 6-3 6 0"/></svg>
-        <div><b>Du får 5 inbjudningar</b><span>När du är inne kan du bjuda in fem vänner med din egen länk.</span></div>
+        <div><b>Du får 5 egna inbjudningar</b><span>När du är inne kan du bjuda in fem vänner med din egen länk.</span></div>
       </div>
     </div>
-    <a class="btn rise d4" id="get" href="https://testflight.apple.com/join/fAdWqBTA">Ladda ner YOU OS</a>
-    <p class="fine" id="copied">Din kod <span class="code" id="codeShow"></span> kopieras. Klistra in den när appen öppnas.</p>
-    <p class="fine">Första gången? Hämta <a href="https://apps.apple.com/app/testflight/id899247664">TestFlight</a> från App Store först. Bara iPhone just nu.</p>
+
+    <a class="btn rise d5" id="get" href="https://testflight.apple.com/join/fAdWqBTA">Ladda ner YOU OS</a>
+    <p class="fine rise d5" id="copied">Koden kopieras när du trycker. Klistra in den när appen öppnas.</p>
+    <p class="fine rise d5">Första gången? Hämta <a href="https://apps.apple.com/app/testflight/id899247664">TestFlight</a> från App Store först. Bara iPhone just nu.</p>
   </section>
 
   <!-- Koden finns inte eller är slut. -->
-  <section class="step" id="used" hidden>
-    <div class="center">
-      <div class="pebble" aria-hidden="true"><img src="pebble.png" alt=""></div>
-      <h1>Den här inbjudan<br><em>är redan använd.</em></h1>
-      <p class="fine" style="font-size:15px;margin-top:18px">Be om en ny, eller ställ dig i kön.</p>
-    </div>
+  <section id="used" hidden style="width:100%">
+    <h1>Den här inbjudan<em>är redan använd.</em></h1>
+    <p class="lead">Be om en ny, eller ställ dig i kön så hör vi av oss.</p>
     <a class="btn" href="/">Ställ dig i kön</a>
   </section>
+
+  <footer>
+    <a href="integritet.html">Integritet</a>
+    <a href="villkor.html">Villkor</a>
+    <a href="mailto:youosapp@gmail.com">Kontakt</a>
+  </footer>
 </main>
 <script>
   const API = 'https://api.youosapp.com/rest/v1/rpc/';
@@ -101,25 +121,26 @@
   const $ = (id) => document.getElementById(id);
   const code = (new URLSearchParams(location.search).get('c') || '').trim().toUpperCase();
   $('codeShow').textContent = code;
-  const esc = (s) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const showUsed = () => { $('ok').hidden = true; $('used').hidden = false; };
 
   // Vem som bjöd in, och om det finns platser kvar.
-  if (!code) { $('s1').hidden = true; $('used').hidden = false; }
+  if (!code) showUsed();
   else fetch(API + 'invite_info', { method: 'POST', headers: H, body: JSON.stringify({ p_code: code }) })
     .then((r) => (r.ok ? r.json() : []))
     .then((rows) => {
       const row = Array.isArray(rows) ? rows[0] : null;
-      if (!row || row.ok === false) { $('s1').hidden = true; $('used').hidden = false; return; }
-      if (row.name) $('hello').innerHTML = 'Välkommen.<br><em>' + esc(row.name) + ' har bjudit in dig till YOU OS.</em>';
+      if (!row || row.ok === false) return showUsed();
+      if (row.name) {
+        $('hello').firstChild.textContent = row.name + ' har bjudit in dig.';
+        $('from').textContent = 'Från ' + row.name + ' · gäller för en person';
+      }
     })
     .catch(() => {});
-
-  $('start').addEventListener('click', () => { $('s1').hidden = true; $('s2').hidden = false; window.scrollTo(0, 0); });
 
   // Koden läggs i urklipp när hon trycker, så att appen kan klistra in den direkt.
   $('get').addEventListener('click', () => {
     try { navigator.clipboard && navigator.clipboard.writeText(code); } catch (e) {}
-    $('copied').textContent = 'Din kod ' + code + ' är kopierad. Klistra in den när appen öppnas.';
+    $('copied').textContent = 'Koden ' + code + ' är kopierad. Klistra in den när appen öppnas.';
   });
 </script>
 </body>
