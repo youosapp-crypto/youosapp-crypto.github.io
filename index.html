@@ -2,114 +2,154 @@
 <html lang="sv">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>YOU OS</title>
-<meta name="description" content="Ditt liv, vackert organiserat på ett ställe. Kalender, rytmer, mål och Hedda, din personliga AI.">
+<meta name="description" content="Något nytt är på väg. Först för några få.">
+<meta property="og:title" content="YOU OS">
+<meta property="og:description" content="Något nytt är på väg. Först för några få.">
+<meta property="og:image" content="https://youosapp.com/pebble.png">
+<meta name="theme-color" content="#F6F2EC">
 <link rel="icon" href="favicon.png">
 <link rel="apple-touch-icon" href="pebble.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Newsreader:ital,opsz,wght@1,6..72,300&display=swap" rel="stylesheet">
 <style>
-  :root { --bg:#F6F2EC; --raised:#FFFDFA; --line:#E4DACD; --text:#4A4038; --soft:#8F8780; --aura:#E2C8B0; }
+  :root { --bg:#F6F2EC; --raised:#FFFDFA; --line:#E4DACD; --text:#4A4038; --soft:#8F8780; --aura:#E2C8B0; --auraStrong:#D8B291; }
   * { box-sizing:border-box; }
   html, body { height:100%; }
-  body { margin:0; background:var(--bg); color:var(--text); font-family:'DM Sans',system-ui,sans-serif; line-height:1.6; -webkit-font-smoothing:antialiased; }
-  main { max-width:620px; margin:0 auto; padding:56px 24px 72px; min-height:100%; display:flex; flex-direction:column; }
-  .pebble { width:150px; height:150px; margin:0 0 24px -22px; animation:breathe 6s ease-in-out infinite; }
+  body { margin:0; background:var(--bg); color:var(--text); font-family:'DM Sans',system-ui,sans-serif; line-height:1.6; -webkit-font-smoothing:antialiased; overflow-x:hidden; }
+
+  /* Ett mjukt ljus bakom allt, som andas långsamt. */
+  .glow { position:fixed; left:50%; top:30%; width:900px; height:900px; transform:translate(-50%,-50%); border-radius:50%;
+          background:radial-gradient(circle, rgba(226,200,176,.55) 0%, rgba(226,200,176,.18) 38%, rgba(246,242,236,0) 68%);
+          animation:glow 9s ease-in-out infinite; pointer-events:none; z-index:0; }
+  @keyframes glow { 0%,100% { opacity:.75; transform:translate(-50%,-50%) scale(1); } 50% { opacity:1; transform:translate(-50%,-50%) scale(1.06); } }
+
+  main { position:relative; z-index:1; max-width:520px; margin:0 auto; padding:max(48px, env(safe-area-inset-top)) 24px 48px; min-height:100%;
+         display:flex; flex-direction:column; align-items:center; text-align:center; }
+  .brand { font-size:13px; letter-spacing:.32em; color:var(--soft); margin:0; }
+
+  .pebble { width:168px; height:168px; margin:56px 0 40px; animation:breathe 6s ease-in-out infinite; filter:drop-shadow(0 30px 50px rgba(184,150,120,.35)); }
   .pebble img { width:100%; height:100%; display:block; }
-  @keyframes breathe { 0%,100% { transform:scale(1); } 50% { transform:scale(1.035); } }
-  @media (prefers-reduced-motion: reduce) { .pebble { animation:none; } }
-  h1 { font-weight:300; font-size:56px; line-height:1.05; letter-spacing:-.03em; margin:0 0 20px; }
-  .lead { font-size:21px; margin:0 0 10px; }
-  .soft { color:var(--soft); font-size:17px; margin:0; }
-  .actions { display:flex; gap:12px; flex-wrap:wrap; margin-top:40px; }
-  .btn { display:inline-flex; align-items:center; justify-content:center; height:52px; padding:0 28px; border-radius:999px; font-size:16px; font-weight:500; text-decoration:none; transition:transform .2s ease, box-shadow .2s ease; }
+  @keyframes breathe { 0%,100% { transform:scale(1) translateY(0); } 50% { transform:scale(1.04) translateY(-4px); } }
+
+  h1 { font-weight:300; font-size:44px; line-height:1.08; letter-spacing:-.03em; margin:0; text-wrap:balance; }
+  h1 .nb { white-space:nowrap; }
+  h1 em { display:block; font-family:'Newsreader',Georgia,serif; font-style:italic; font-weight:300; font-size:52px; letter-spacing:-.02em; color:#9C7E62; margin-top:4px; }
+
+  /* Rader som tonar fram en i taget. */
+  .rise { opacity:0; transform:translateY(10px); animation:rise .9s cubic-bezier(.2,.7,.2,1) forwards; }
+  .d1 { animation-delay:.15s; } .d2 { animation-delay:.45s; } .d3 { animation-delay:.8s; } .d4 { animation-delay:1.15s; } .d5 { animation-delay:1.5s; }
+  @keyframes rise { to { opacity:1; transform:none; } }
+
+  .count { margin:28px 0 0; font-size:15px; color:var(--soft); }
+  .count b { font-weight:500; color:var(--text); font-variant-numeric:tabular-nums; }
+
+  .join { width:100%; margin-top:36px; }
+  .field { width:100%; height:54px; border:1px solid var(--line); border-radius:18px; background:rgba(255,253,250,.85); padding:0 20px; font:inherit; font-size:16px;
+           color:var(--text); margin-bottom:10px; outline:none; text-align:center; transition:border-color .25s ease, background .25s ease; -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); }
+  .field:focus { border-color:var(--auraStrong); background:var(--raised); }
+  .btn { width:100%; height:54px; border:0; border-radius:999px; background:var(--text); color:var(--raised); font:inherit; font-size:16px; font-weight:500; cursor:pointer;
+         box-shadow:0 10px 34px rgba(74,64,56,.22); transition:transform .2s ease, box-shadow .2s ease; }
+  .btn:hover { box-shadow:0 12px 40px rgba(74,64,56,.3); }
   .btn:active { transform:scale(.98); }
-  .primary { background:var(--text); color:var(--raised); box-shadow:0 8px 28px rgba(74,64,56,.18); }
-  .primary:hover { box-shadow:0 10px 34px rgba(74,64,56,.26); }
-  .ghost { border:1px solid var(--line); color:var(--text); background:var(--raised); }
-  .note { font-size:14px; color:var(--soft); margin-top:14px; }
-  .features { margin-top:64px; display:grid; gap:12px; }
-  .card { background:var(--raised); border:1px solid var(--line); border-radius:24px; padding:22px 24px; }
-  .card b { font-weight:500; display:block; margin-bottom:2px; }
-  .card span { color:var(--soft); font-size:15px; }
-  footer { margin-top:auto; padding-top:64px; display:flex; gap:20px; flex-wrap:wrap; font-size:14px; }
-  footer a { color:var(--text); }
-  .join { margin-top:40px; background:var(--raised); border:1px solid var(--line); border-radius:28px; padding:24px; box-shadow:0 18px 50px rgba(74,64,56,.07); }
-  .join h2 { font-weight:400; font-size:22px; margin:0 0 4px; letter-spacing:-.01em; }
-  .join p { margin:0 0 18px; color:var(--soft); font-size:15px; }
-  .field { width:100%; height:52px; border:1px solid var(--line); border-radius:16px; background:var(--bg); padding:0 18px; font:inherit; font-size:16px; color:var(--text); margin-bottom:10px; outline:none; transition:border-color .2s ease; }
-  .field:focus { border-color:var(--aura); }
-  .join .btn { width:100%; border:0; cursor:pointer; font-family:inherit; }
-  .join .btn[disabled] { opacity:.6; cursor:default; }
-  .error { color:#9A5B4E; font-size:14px; min-height:20px; margin:8px 0 0; }
-  .place { font-weight:300; font-size:64px; line-height:1; letter-spacing:-.03em; margin:4px 0 10px; }
+  .btn[disabled] { opacity:.6; cursor:default; }
+  .fine { font-size:13px; color:var(--soft); margin:14px 0 0; }
+  .error { color:#9A5B4E; font-size:14px; min-height:20px; margin:6px 0 0; }
+
+  /* Efter anmälan */
+  .done { width:100%; margin-top:36px; }
+  .done .label { margin:0; font-size:14px; letter-spacing:.2em; color:var(--soft); }
+  .place { font-weight:300; font-size:96px; line-height:1; letter-spacing:-.05em; margin:6px 0 8px; font-variant-numeric:tabular-nums; }
+  .done p { margin:0; color:var(--soft); font-size:16px; }
+  .ticket { margin-top:32px; background:var(--raised); border:1px solid var(--line); border-radius:24px; padding:20px; text-align:left; box-shadow:0 18px 50px rgba(74,64,56,.07); }
+  .ticket b { display:block; font-weight:500; margin-bottom:2px; }
+  .ticket span { color:var(--soft); font-size:14px; }
   .share { display:flex; gap:8px; margin-top:14px; }
-  .share input { flex:1; margin:0; font-size:14px; color:var(--soft); }
-  .share button { height:52px; padding:0 18px; border-radius:16px; border:1px solid var(--line); background:var(--raised); font:inherit; font-size:15px; color:var(--text); cursor:pointer; }
-  .small { font-size:14px; color:var(--soft); margin-top:18px; }
-  .small a { color:var(--text); }
+  .share input { flex:1; margin:0; font-size:14px; color:var(--soft); text-align:left; height:48px; }
+  .share button { height:48px; padding:0 18px; border-radius:16px; border:1px solid var(--line); background:var(--bg); font:inherit; font-size:15px; color:var(--text); cursor:pointer; }
+
+  .countdown { margin-top:48px; font-size:13px; letter-spacing:.24em; color:var(--soft); }
+  .countdown b { font-weight:500; color:var(--text); letter-spacing:.06em; }
+
+  footer { margin-top:auto; padding-top:56px; display:flex; gap:18px; flex-wrap:wrap; justify-content:center; font-size:13px; }
+  footer a { color:var(--soft); text-decoration:none; }
+  footer a:hover { color:var(--text); }
   [hidden] { display:none !important; }
-  @media (max-width:480px) { h1 { font-size:46px; } .btn { flex:1; } .place { font-size:56px; } }
+
+  @media (max-width:420px) { h1 { font-size:36px; } h1 em { font-size:46px; } .pebble { width:148px; height:148px; margin:44px 0 32px; } }
+  @media (prefers-reduced-motion: reduce) { .glow, .pebble { animation:none; } .rise { animation:none; opacity:1; transform:none; } }
 </style>
 </head>
-<body><main>
-  <div class="pebble" aria-hidden="true"><img src="pebble.png" alt=""></div>
-  <h1>YOU OS</h1>
-  <p class="lead">Ditt liv, vackert organiserat på ett ställe.</p>
-  <p class="soft">Kalender, rytmer, mål och Hedda, din personliga AI. Släpps 2027, först för några få.</p>
+<body>
+<div class="glow" aria-hidden="true"></div>
+<main>
+  <p class="brand rise d1">YOU OS</p>
+  <div class="pebble rise d1" aria-hidden="true"><img src="pebble.png" alt=""></div>
 
-  <!-- Waitlisten: namn och mejl, sedan "Du är nr 147 i kön" och en egen länk att dela. -->
-  <section class="join" id="join">
-    <div id="ask">
-      <h2>Ställ dig i kön</h2>
-      <p>YOU OS släpps in i små omgångar. Vi hör av oss när det är din tur.</p>
-      <form id="form" novalidate>
-        <input class="field" id="name" name="name" autocomplete="given-name" placeholder="Ditt förnamn" maxlength="80" required>
-        <input class="field" id="email" name="email" type="email" autocomplete="email" placeholder="Din mejl" maxlength="200" required>
-        <button class="btn primary" id="go" type="submit">Ställ mig i kön</button>
-        <p class="error" id="err" role="alert"></p>
-      </form>
-    </div>
-    <div id="done" hidden>
-      <p style="margin:0">Du är</p>
-      <div class="place" id="place">nr –</div>
-      <p id="doneText">i kön. Vi mejlar dig när det är din tur.</p>
-      <p style="margin:18px 0 0;color:var(--text)">Känner du någon som också vill få ihop sitt liv? Dela din länk.</p>
+  <h1 class="rise d2">Något nytt är <span class="nb">på väg.</span><em>Först för några få.</em></h1>
+  <p class="count rise d3" id="countLine" hidden><b id="count">0</b> står redan i kön</p>
+
+  <!-- Waitlisten: förnamn och mejl, sedan "Du är nr 12" och en egen länk att dela. -->
+  <section class="join rise d4" id="ask">
+    <form id="form" novalidate>
+      <input class="field" id="name" name="name" autocomplete="given-name" placeholder="Ditt förnamn" maxlength="80" required>
+      <input class="field" id="email" name="email" type="email" autocomplete="email" placeholder="Din mejl" maxlength="200" required>
+      <button class="btn" id="go" type="submit">Ställ mig i kön</button>
+      <p class="error" id="err" role="alert"></p>
+    </form>
+    <p class="fine">Vi släpper in i små omgångar. Bara med inbjudan.</p>
+  </section>
+
+  <section class="done" id="done" hidden>
+    <p class="label">DIN PLATS</p>
+    <div class="place" id="place">–</div>
+    <p id="doneText">Vi hör av oss när det är din tur.</p>
+    <div class="ticket">
+      <b>Tipsa någon som borde vara med</b>
+      <span>Din egen länk. Den som ställer sig i kön via den syns som tipsad av dig.</span>
       <div class="share">
         <input class="field" id="link" readonly aria-label="Din länk">
         <button type="button" id="copy">Kopiera</button>
       </div>
     </div>
   </section>
-  <p class="small">Har du redan fått en inbjudan? <a href="https://youosapp.expo.app">Logga in</a></p>
 
-  <div class="features">
-    <div class="card"><b>Idag</b><span>Kalendern, tre saker som spelar roll och dina rytmer i en lugn vy.</span></div>
-    <div class="card"><b>Hedda</b><span>Ser hela din dag och föreslår vad som kan vänta. Hon frågar alltid först.</span></div>
-    <div class="card"><b>Rytmer, mål och söndagsbrev</b><span>Små vanor varje dag, mål som blir till handling och veckan i lugn och ro.</span></div>
-  </div>
+  <p class="countdown rise d5" id="countdown"></p>
 
   <footer>
-    <a href="integritet.html">Så hanterar vi din data</a>
-    <a href="villkor.html">Användarvillkor</a>
-    <a href="mailto:youosapp@gmail.com">youosapp@gmail.com</a>
+    <a href="https://youosapp.expo.app">Har du en inbjudan? Logga in</a>
+    <a href="integritet.html">Integritet</a>
+    <a href="villkor.html">Villkor</a>
+    <a href="mailto:youosapp@gmail.com">Kontakt</a>
   </footer>
 </main>
 <script>
   // Skickar namn och mejl till Supabase (funktionen join_waitlist i supabase/waitlist.sql).
   // Nyckeln är den publika, samma som appen använder. Den kan bara ställa någon i kön, inte läsa listan.
-  const API = 'https://api.youosapp.com/rest/v1/rpc/join_waitlist';
+  const API = 'https://api.youosapp.com/rest/v1/rpc/';
   const KEY = 'sb_publishable_fBfRI-2oFquoHA9F9ype7g_WCByczUN';
+  const H = { apikey: KEY, Authorization: 'Bearer ' + KEY, 'Content-Type': 'application/json' };
   const ref = new URLSearchParams(location.search).get('ref') || '';
   const $ = (id) => document.getElementById(id);
+
+  // Nedräkning till släppet 1 januari 2027.
+  const launch = new Date('2027-01-01T00:00:00+01:00');
+  const days = Math.ceil((launch - new Date()) / 86400000);
+  if (days > 0) $('countdown').innerHTML = '<b>' + days + '</b> DAGAR KVAR';
+
+  // Hur många som står i kön. Syns först när det är fler än 25, så att en tom kö inte känns tom.
+  fetch(API + 'waitlist_size', { method: 'POST', headers: H, body: '{}' })
+    .then((r) => (r.ok ? r.json() : null))
+    .then((n) => { if (typeof n === 'number' && n >= 25) { $('count').textContent = n.toLocaleString('sv-SE'); $('countLine').hidden = false; } })
+    .catch(() => {});
 
   function show(row) {
     $('ask').hidden = true;
     $('done').hidden = false;
     $('place').textContent = 'nr ' + row.place;
-    if (row.ahead_of_you > 0) $('doneText').textContent = 'i kön. ' + row.ahead_of_you + ' före dig. Vi mejlar dig när det är din tur.';
+    if (row.ahead_of_you > 0) $('doneText').textContent = row.ahead_of_you + ' före dig. Vi hör av oss när det är din tur.';
     $('link').value = 'https://youosapp.com/?ref=' + row.ref_code;
     try { localStorage.setItem('youos-waitlist', JSON.stringify(row)); } catch (e) {}
   }
@@ -127,11 +167,7 @@
     $('go').disabled = true;
     $('go').textContent = 'Ett ögonblick …';
     try {
-      const res = await fetch(API, {
-        method: 'POST',
-        headers: { apikey: KEY, Authorization: 'Bearer ' + KEY, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ p_name: name, p_email: email, p_ref: ref || null }),
-      });
+      const res = await fetch(API + 'join_waitlist', { method: 'POST', headers: H, body: JSON.stringify({ p_name: name, p_email: email, p_ref: ref || null }) });
       if (!res.ok) throw new Error(res.status);
       const rows = await res.json();
       if (!rows || !rows[0]) throw new Error('empty');
