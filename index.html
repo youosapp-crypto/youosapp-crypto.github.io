@@ -60,6 +60,13 @@
   /* De som redan blivit inbjudna: en tydlig men lugn väg in, precis under knappen. */
   .invited { margin:22px 0 0; font-size:14px; }
   .invited a { color:var(--text); text-decoration:none; border-bottom:1px solid var(--auraStrong); padding-bottom:2px; }
+  .linkBtn { background:none; border:0; padding:0 0 2px; font:inherit; font-size:14px; color:var(--text); border-bottom:1px solid var(--auraStrong); cursor:pointer; }
+  .codeForm { margin-top:16px; }
+  .field.code { text-align:center; letter-spacing:.2em; text-transform:uppercase; margin-bottom:10px; }
+  .codeOk { margin-top:18px; text-align:left; background:var(--raised); border:1px solid var(--line); border-radius:24px; padding:20px; box-shadow:0 18px 50px rgba(74,64,56,.07); }
+  .codeOk b { display:block; font-weight:500; margin-bottom:8px; }
+  .codeOk ol { margin:0 0 16px; padding-left:20px; color:var(--soft); font-size:15px; line-height:1.6; }
+  .codeOk .btn { display:flex; align-items:center; justify-content:center; text-decoration:none; }
   .error { color:#9A5B4E; font-size:14px; min-height:20px; margin:6px 0 0; }
 
   /* Efter anmälan */
@@ -105,7 +112,25 @@
       <p class="error" id="err" role="alert"></p>
     </form>
     <p class="fine">Platserna släpps i omgångar.</p>
-    <p class="invited"><a href="https://youosapp.expo.app">Har du fått en inbjudan? Logga in här</a></p>
+    <!-- Har hon fått en kod av någon: kolla den, och visa sedan hur man laddar ner appen. -->
+    <div class="invited">
+      <button type="button" class="linkBtn" id="codeToggle">Har du fått en kod?</button>
+      <form id="codeForm" class="codeForm" novalidate hidden>
+        <input class="field code" id="code" placeholder="Din kod" autocapitalize="characters" autocomplete="off" autocorrect="off" spellcheck="false" maxlength="20">
+        <button class="btn" id="codeGo" type="submit">Kolla koden</button>
+        <p class="error" id="codeErr" role="alert"></p>
+      </form>
+      <div class="codeOk" id="codeOk" hidden>
+        <b>Koden fungerar 🤍</b>
+        <ol>
+          <li>Ladda ner appen TestFlight från App Store.</li>
+          <li>Tryck på knappen nedan och installera YOU OS.</li>
+          <li>Skriv in din kod <span id="codeShow"></span> när appen öppnas.</li>
+        </ol>
+        <a class="btn" href="https://testflight.apple.com/join/fAdWqBTA">Ladda ner YOU OS</a>
+        <p class="fine" style="margin-top:12px">Bara för iPhone just nu.</p>
+      </div>
+    </div>
   </section>
 
   <section class="done" id="done" hidden>
@@ -138,6 +163,34 @@
   const H = { apikey: KEY, Authorization: 'Bearer ' + KEY, 'Content-Type': 'application/json' };
   const ref = new URLSearchParams(location.search).get('ref') || '';
   const $ = (id) => document.getElementById(id);
+
+  // Inbjudningskod: kollas mot check_invite (räknar inte ner, det sker först i appen).
+  $('codeToggle').addEventListener('click', () => {
+    $('codeForm').hidden = !$('codeForm').hidden;
+    if (!$('codeForm').hidden) $('code').focus();
+  });
+  $('codeForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const code = $('code').value.trim().toUpperCase();
+    if (!code) return;
+    $('codeGo').disabled = true;
+    $('codeErr').textContent = '';
+    try {
+      const res = await fetch(API + 'check_invite', { method: 'POST', headers: H, body: JSON.stringify({ p_code: code }) });
+      const ok = res.ok && (await res.json()) === true;
+      if (ok) {
+        $('codeShow').textContent = code;
+        $('codeForm').hidden = true;
+        $('codeToggle').hidden = true;
+        $('codeOk').hidden = false;
+      } else {
+        $('codeErr').textContent = 'Den koden finns inte, eller är redan använd.';
+      }
+    } catch {
+      $('codeErr').textContent = 'Det gick inte att kolla koden just nu. Prova igen.';
+    }
+    $('codeGo').disabled = false;
+  });
 
   // Nedräkning till släppet 1 januari 2027.
   const launch = new Date('2027-01-01T00:00:00+01:00');
