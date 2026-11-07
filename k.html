@@ -41,11 +41,9 @@
   .ticket .code { margin:6px 0 2px; font-weight:300; font-size:30px; letter-spacing:.14em; }
   .ticket .from { margin:0; font-size:14px; color:var(--soft); }
 
-  .rows { width:100%; margin-top:28px; text-align:left; display:flex; flex-direction:column; gap:18px; }
-  .row { display:flex; gap:16px; align-items:flex-start; }
-  .row svg { flex:none; width:22px; height:22px; margin-top:2px; stroke:#9C7E62; }
-  .row b { display:block; font-weight:500; font-size:16px; }
-  .row span { color:var(--soft); font-size:15px; }
+  .notes { width:100%; margin-top:28px; display:flex; flex-direction:column; gap:10px; }
+  .notes p { margin:0; font-size:15px; font-weight:300; color:var(--soft); line-height:1.55; text-wrap:balance; }
+  .notes b { font-weight:400; color:var(--text); }
 
   .btn { display:flex; align-items:center; justify-content:center; width:100%; height:56px; margin-top:32px; border:0; border-radius:999px; background:var(--text); color:var(--raised);
          font:inherit; font-size:16px; font-weight:500; text-decoration:none; cursor:pointer; box-shadow:0 10px 34px rgba(74,64,56,.22); transition:transform .2s ease, box-shadow .2s ease; }
@@ -81,19 +79,10 @@
       <p class="from" id="from">Gäller för en person</p>
     </div>
 
-    <div class="rows rise d4">
-      <div class="row">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.6L20 9.4l-4 4 1 5.6-5-2.8-5 2.8 1-5.6-4-4 5.4-.8z"/></svg>
-        <div><b>Bara för inbjudna</b><span>YOU OS är i en sluten beta. Du har fått en av platserna.</span></div>
-      </div>
-      <div class="row">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg>
-        <div><b>Din data är din</b><span>Du bestämmer vad YOU OS får se, och kan radera allt när du vill.</span></div>
-      </div>
-      <div class="row">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="13" rx="2"/><path d="M12 8v13M3 12h18M12 8c-2-3-6-3-6 0M12 8c2-3 6-3 6 0"/></svg>
-        <div><b>Du får 5 egna inbjudningar</b><span>När du är inne kan du bjuda in fem vänner med din egen länk.</span></div>
-      </div>
+    <!-- Två korta rader i samma typsnitt och ton som resten av sidan. -->
+    <div class="notes rise d4">
+      <p><b>Bara för inbjudna.</b> Du har fått en av platserna i den slutna betan.</p>
+      <p><b>Fem egna inbjudningar.</b> När du är inne kan du bjuda in fem vänner.</p>
     </div>
 
     <a class="btn rise d5" id="get" href="https://testflight.apple.com/join/fAdWqBTA">Ladda ner YOU OS</a>
