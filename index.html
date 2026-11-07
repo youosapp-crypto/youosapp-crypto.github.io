@@ -36,20 +36,54 @@
   .card span { color:var(--soft); font-size:15px; }
   footer { margin-top:auto; padding-top:64px; display:flex; gap:20px; flex-wrap:wrap; font-size:14px; }
   footer a { color:var(--text); }
-  @media (max-width:480px) { h1 { font-size:46px; } .btn { flex:1; } }
+  .join { margin-top:40px; background:var(--raised); border:1px solid var(--line); border-radius:28px; padding:24px; box-shadow:0 18px 50px rgba(74,64,56,.07); }
+  .join h2 { font-weight:400; font-size:22px; margin:0 0 4px; letter-spacing:-.01em; }
+  .join p { margin:0 0 18px; color:var(--soft); font-size:15px; }
+  .field { width:100%; height:52px; border:1px solid var(--line); border-radius:16px; background:var(--bg); padding:0 18px; font:inherit; font-size:16px; color:var(--text); margin-bottom:10px; outline:none; transition:border-color .2s ease; }
+  .field:focus { border-color:var(--aura); }
+  .join .btn { width:100%; border:0; cursor:pointer; font-family:inherit; }
+  .join .btn[disabled] { opacity:.6; cursor:default; }
+  .error { color:#9A5B4E; font-size:14px; min-height:20px; margin:8px 0 0; }
+  .place { font-weight:300; font-size:64px; line-height:1; letter-spacing:-.03em; margin:4px 0 10px; }
+  .share { display:flex; gap:8px; margin-top:14px; }
+  .share input { flex:1; margin:0; font-size:14px; color:var(--soft); }
+  .share button { height:52px; padding:0 18px; border-radius:16px; border:1px solid var(--line); background:var(--raised); font:inherit; font-size:15px; color:var(--text); cursor:pointer; }
+  .small { font-size:14px; color:var(--soft); margin-top:18px; }
+  .small a { color:var(--text); }
+  [hidden] { display:none !important; }
+  @media (max-width:480px) { h1 { font-size:46px; } .btn { flex:1; } .place { font-size:56px; } }
 </style>
 </head>
 <body><main>
   <div class="pebble" aria-hidden="true"><img src="pebble.png" alt=""></div>
   <h1>YOU OS</h1>
   <p class="lead">Ditt liv, vackert organiserat på ett ställe.</p>
-  <p class="soft">Kalender, rytmer, mål och Hedda, din personliga AI. Snart på App Store.</p>
+  <p class="soft">Kalender, rytmer, mål och Hedda, din personliga AI. Släpps 2027, först för några få.</p>
 
-  <div class="actions">
-    <a class="btn primary" href="https://youosapp.expo.app">Logga in</a>
-    <a class="btn ghost" href="https://youosapp.expo.app">Skapa konto</a>
-  </div>
-  <p class="note">Samma konto i appen och på webben. Allt synkas.</p>
+  <!-- Waitlisten: namn och mejl, sedan "Du är nr 147 i kön" och en egen länk att dela. -->
+  <section class="join" id="join">
+    <div id="ask">
+      <h2>Ställ dig i kön</h2>
+      <p>YOU OS släpps in i små omgångar. Vi hör av oss när det är din tur.</p>
+      <form id="form" novalidate>
+        <input class="field" id="name" name="name" autocomplete="given-name" placeholder="Ditt förnamn" maxlength="80" required>
+        <input class="field" id="email" name="email" type="email" autocomplete="email" placeholder="Din mejl" maxlength="200" required>
+        <button class="btn primary" id="go" type="submit">Ställ mig i kön</button>
+        <p class="error" id="err" role="alert"></p>
+      </form>
+    </div>
+    <div id="done" hidden>
+      <p style="margin:0">Du är</p>
+      <div class="place" id="place">nr –</div>
+      <p id="doneText">i kön. Vi mejlar dig när det är din tur.</p>
+      <p style="margin:18px 0 0;color:var(--text)">Känner du någon som också vill få ihop sitt liv? Dela din länk.</p>
+      <div class="share">
+        <input class="field" id="link" readonly aria-label="Din länk">
+        <button type="button" id="copy">Kopiera</button>
+      </div>
+    </div>
+  </section>
+  <p class="small">Har du redan fått en inbjudan? <a href="https://youosapp.expo.app">Logga in</a></p>
 
   <div class="features">
     <div class="card"><b>Idag</b><span>Kalendern, tre saker som spelar roll och dina rytmer i en lugn vy.</span></div>
@@ -62,5 +96,57 @@
     <a href="villkor.html">Användarvillkor</a>
     <a href="mailto:youosapp@gmail.com">youosapp@gmail.com</a>
   </footer>
-</main></body>
+</main>
+<script>
+  // Skickar namn och mejl till Supabase (funktionen join_waitlist i supabase/waitlist.sql).
+  // Nyckeln är den publika, samma som appen använder. Den kan bara ställa någon i kön, inte läsa listan.
+  const API = 'https://api.youosapp.com/rest/v1/rpc/join_waitlist';
+  const KEY = 'sb_publishable_fBfRI-2oFquoHA9F9ype7g_WCByczUN';
+  const ref = new URLSearchParams(location.search).get('ref') || '';
+  const $ = (id) => document.getElementById(id);
+
+  function show(row) {
+    $('ask').hidden = true;
+    $('done').hidden = false;
+    $('place').textContent = 'nr ' + row.place;
+    if (row.ahead_of_you > 0) $('doneText').textContent = 'i kön. ' + row.ahead_of_you + ' före dig. Vi mejlar dig när det är din tur.';
+    $('link').value = 'https://youosapp.com/?ref=' + row.ref_code;
+    try { localStorage.setItem('youos-waitlist', JSON.stringify(row)); } catch (e) {}
+  }
+
+  // Har hon redan ställt sig i kön på den här enheten: visa platsen direkt.
+  try { const saved = JSON.parse(localStorage.getItem('youos-waitlist') || 'null'); if (saved && saved.place) show(saved); } catch (e) {}
+
+  $('form').addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    const name = $('name').value.trim();
+    const email = $('email').value.trim();
+    $('err').textContent = '';
+    if (!name) { $('err').textContent = 'Skriv ditt förnamn.'; return; }
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { $('err').textContent = 'Den mejlen ser inte riktigt rätt ut.'; return; }
+    $('go').disabled = true;
+    $('go').textContent = 'Ett ögonblick …';
+    try {
+      const res = await fetch(API, {
+        method: 'POST',
+        headers: { apikey: KEY, Authorization: 'Bearer ' + KEY, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ p_name: name, p_email: email, p_ref: ref || null }),
+      });
+      if (!res.ok) throw new Error(res.status);
+      const rows = await res.json();
+      if (!rows || !rows[0]) throw new Error('empty');
+      show(rows[0]);
+    } catch (e) {
+      $('err').textContent = 'Något gick snett. Försök igen om en stund.';
+      $('go').disabled = false;
+      $('go').textContent = 'Ställ mig i kön';
+    }
+  });
+
+  $('copy').addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText($('link').value); $('copy').textContent = 'Kopierad'; }
+    catch (e) { $('link').select(); }
+  });
+</script>
+</body>
 </html>
