@@ -1,0 +1,17 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": [
+          "67UAJNN7FR.com.youosapp.youos"
+        ],
+        "components": [
+          {
+            "/": "/i",
+            "comment": "Inbjudningar till händelser öppnas i appen"
+          }
+        ]
+      }
+    ]
+  }
+}

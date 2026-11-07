@@ -13,7 +13,7 @@
 <link rel="apple-touch-icon" href="pebble.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Newsreader:ital,opsz,wght@1,6..72,300&display=swap" rel="stylesheet">
 <style>
   :root { --bg:#F6F2EC; --raised:#FFFDFA; --line:#E4DACD; --text:#4A4038; --soft:#8F8780; --aura:#E2C8B0; --auraStrong:#D8B291; }
   * { box-sizing:border-box; }
@@ -34,10 +34,10 @@
   .pebble img { width:100%; height:100%; display:block; }
   @keyframes breathe { 0%,100% { transform:scale(1) translateY(0); } 50% { transform:scale(1.04) translateY(-4px); } }
 
-  h1 { font-weight:300; font-size:56px; line-height:1.08; letter-spacing:-.03em; margin:0; text-wrap:balance; }
+  h1 { font-weight:300; font-size:42px; line-height:1.08; letter-spacing:-.03em; margin:0; text-wrap:balance; }
   h1 .nb { white-space:nowrap; }
-  /* Andra raden i samma typsnitt som appen, i den varma accentfärgen. */
-  h1 em { display:block; font-style:normal; font-weight:300; color:#9C7E62; font-size:20px; line-height:1.4; letter-spacing:-.01em; margin-top:14px; }
+  /* Andra raden i den tunna kursiva serifen, i den varma accentfärgen. */
+  h1 em { display:block; font-family:'Newsreader',Georgia,serif; font-style:italic; font-weight:300; font-size:48px; line-height:1.1; letter-spacing:-.02em; color:#9C7E62; margin-top:6px; }
 
   /* Rader som tonar fram en i taget. */
   .rise { opacity:0; transform:translateY(10px); animation:rise .9s cubic-bezier(.2,.7,.2,1) forwards; }
@@ -57,6 +57,9 @@
   .btn:active { transform:scale(.98); }
   .btn[disabled] { opacity:.6; cursor:default; }
   .fine { font-size:13px; color:var(--soft); margin:14px 0 0; }
+  /* De som redan blivit inbjudna: en tydlig men lugn väg in, precis under knappen. */
+  .invited { margin:22px 0 0; font-size:14px; }
+  .invited a { color:var(--text); text-decoration:none; border-bottom:1px solid var(--auraStrong); padding-bottom:2px; }
   .error { color:#9A5B4E; font-size:14px; min-height:20px; margin:6px 0 0; }
 
   /* Efter anmälan */
@@ -79,27 +82,30 @@
   footer a:hover { color:var(--text); }
   [hidden] { display:none !important; }
 
-  @media (max-width:420px) { h1 { font-size:46px; } h1 em { font-size:18px; } .pebble { width:148px; height:148px; margin:44px 0 32px; } }
+  @media (min-width:900px) { main { max-width:620px; } h1 { font-size:58px; } h1 em { font-size:68px; } .pebble { margin:44px 0 36px; } .join { max-width:420px; } }
+  @media (max-width:420px) { h1 { font-size:34px; } h1 em { font-size:38px; } .pebble { width:148px; height:148px; margin:44px 0 32px; } }
   @media (prefers-reduced-motion: reduce) { .glow, .pebble { animation:none; } .rise { animation:none; opacity:1; transform:none; } }
 </style>
 </head>
 <body>
 <div class="glow" aria-hidden="true"></div>
 <main>
+  <p class="brand rise d1">YOU OS</p>
   <div class="pebble rise d1" aria-hidden="true"><img src="pebble.png" alt=""></div>
 
-  <h1 class="rise d2">YOU OS<em>Ditt liv, vackert organiserat på ett ställe.</em></h1>
+  <h1 class="rise d2">Ditt liv, vackert <span class="nb">organiserat.</span><em>Bli en av de första.</em></h1>
   <p class="count rise d3" id="countLine" hidden><b id="count">0</b> står redan på väntelistan</p>
 
   <!-- Waitlisten: förnamn och mejl, sedan "Du är nr 12" och en egen länk att dela. -->
   <section class="join rise d4" id="ask">
     <form id="form" novalidate>
-      <input class="field" id="name" name="name" autocomplete="given-name" placeholder="Ditt förnamn" maxlength="80" required>
-      <input class="field" id="email" name="email" type="email" autocomplete="email" placeholder="Din mejl" maxlength="200" required>
-      <button class="btn" id="go" type="submit">Skriv upp mig</button>
+      <input class="field" id="name" name="name" autocomplete="given-name" placeholder="Namn" maxlength="80" required>
+      <input class="field" id="email" name="email" type="email" autocomplete="email" placeholder="Mail" maxlength="200" required>
+      <button class="btn" id="go" type="submit">Jag vill vara med</button>
       <p class="error" id="err" role="alert"></p>
     </form>
-    <p class="fine">Vi bjuder in några i taget.</p>
+    <p class="fine">Platserna släpps i omgångar.</p>
+    <p class="invited"><a href="https://youosapp.expo.app">Har du fått en inbjudan? Logga in här</a></p>
   </section>
 
   <section class="done" id="done" hidden>
@@ -119,7 +125,6 @@
   <p class="countdown rise d5" id="countdown"></p>
 
   <footer>
-    <a href="https://youosapp.expo.app">Har du en inbjudan? Logga in</a>
     <a href="integritet.html">Integritet</a>
     <a href="villkor.html">Villkor</a>
     <a href="mailto:youosapp@gmail.com">Kontakt</a>
@@ -162,8 +167,8 @@
     const name = $('name').value.trim();
     const email = $('email').value.trim();
     $('err').textContent = '';
-    if (!name) { $('err').textContent = 'Skriv ditt förnamn.'; return; }
-    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { $('err').textContent = 'Den mejlen ser inte riktigt rätt ut.'; return; }
+    if (!name) { $('err').textContent = 'Skriv ditt namn.'; return; }
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { $('err').textContent = 'Den mailen ser inte riktigt rätt ut.'; return; }
     $('go').disabled = true;
     $('go').textContent = 'Ett ögonblick …';
     try {
@@ -175,7 +180,7 @@
     } catch (e) {
       $('err').textContent = 'Något gick snett. Försök igen om en stund.';
       $('go').disabled = false;
-      $('go').textContent = 'Begär en inbjudan';
+      $('go').textContent = 'Jag vill vara med';
     }
   });
 

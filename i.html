@@ -39,6 +39,13 @@
   @keyframes rise { to { opacity:1; transform:none; } }
 
   .reply { width:100%; margin-top:30px; }
+  .who { margin-bottom:14px; }
+  .whoLabel { margin:0 0 10px; font-size:14px; color:var(--soft); }
+  .chips { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; }
+  .chips button { height:40px; padding:0 16px; border-radius:999px; border:1px solid var(--line); background:var(--raised); font:inherit; font-size:15px; color:var(--text); cursor:pointer; }
+  .chips button.on { background:var(--text); color:var(--raised); border-color:var(--text); }
+  .chips button.other { color:var(--soft); background:transparent; }
+  .openApp { display:inline-block; margin:18px 0 0; font-size:14px; color:var(--text); text-decoration:none; border-bottom:1px solid var(--auraStrong); padding-bottom:2px; }
   .field { width:100%; height:52px; border:1px solid var(--line); border-radius:18px; background:rgba(255,253,250,.85); padding:0 18px; font:inherit; font-size:16px; color:var(--text);
            outline:none; text-align:center; margin-bottom:10px; }
   .field:focus { border-color:var(--auraStrong); background:var(--raised); }
@@ -83,8 +90,14 @@
     <p class="when rise d3" id="when"></p>
     <p class="where rise d3" id="where" hidden></p>
     <p class="note rise d3" id="note" hidden></p>
+    <a class="openApp rise d3" id="openApp" hidden>Har du YOU OS? Öppna i appen</a>
 
     <div class="reply rise d4" id="reply">
+      <!-- Står hon redan på listan (inbjuden med mejl eller nummer) trycker hon på sitt namn, så hamnar svaret rätt. -->
+      <div class="who" id="who" hidden>
+        <p class="whoLabel">Vem är du?</p>
+        <div class="chips" id="whoChips"></div>
+      </div>
       <input class="field" id="name" autocomplete="given-name" placeholder="Ditt namn" maxlength="80">
       <div class="answers">
         <button type="button" data-a="yes">Ja</button>
@@ -127,6 +140,14 @@
   const $ = (x) => document.getElementById(x);
   const STORE = 'youos-invite-' + id;
   const LABEL = { yes: 'Kommer', maybe: 'Kanske', no: 'Kan inte', pending: 'Inte svarat' };
+  // "charlotte.wettermo" → "Charlotte". Ett namn hon skrivit själv lämnas som det är.
+  const nice = (n) => {
+    if (!n) return 'Gäst';
+    if (/\s/.test(n) || !/[._\d-]/.test(n)) return n.charAt(0).toUpperCase() + n.slice(1);
+    const first = n.split(/[._\d-]+/).filter(Boolean)[0] || n;
+    return first.charAt(0).toUpperCase() + first.slice(1);
+  };
+  let other = false;
   let inv = null;
   let mine = {};
   try { mine = JSON.parse(localStorage.getItem(STORE) || '{}'); } catch {}
@@ -169,6 +190,23 @@
     if (inv.location) { $('where').textContent = inv.location; $('where').hidden = false; }
     if (inv.note) { $('note').textContent = inv.note; $('note').hidden = false; }
     if (mine.name) $('name').value = mine.name;
+    // I telefonen: en länk som öppnar inbjudan i appen för den som har YOU OS.
+    if (/iPhone|iPad|Android/i.test(navigator.userAgent)) { $('openApp').href = 'youos://i?t=' + id; $('openApp').hidden = false; }
+    const waiting = (inv.guests || []).filter((x) => x.status === 'pending');
+    const pickable = !mine.guest && !other && waiting.length > 0;
+    $('who').hidden = !pickable;
+    $('name').hidden = pickable;
+    $('whoChips').innerHTML = '';
+    waiting.forEach((x) => {
+      const c = document.createElement('button'); c.type = 'button'; c.textContent = nice(x.name);
+      c.addEventListener('click', () => { mine = { guest: x.id, name: nice(x.name) }; $('name').value = nice(x.name); render(); });
+      $('whoChips').append(c);
+    });
+    if (waiting.length) {
+      const o = document.createElement('button'); o.type = 'button'; o.className = 'other'; o.textContent = 'Jag står inte med';
+      o.addEventListener('click', () => { other = true; render(); $('name').focus(); });
+      $('whoChips').append(o);
+    }
     document.querySelectorAll('[data-a]').forEach((b) => b.classList.toggle('on', b.dataset.a === mine.status));
     $('reply').hidden = !!inv.cancelled;
     const answered = mine.status && !inv.cancelled;
@@ -182,7 +220,7 @@
     $('guestList').innerHTML = '';
     g.forEach((x) => {
       const row = document.createElement('div'); row.className = 'guest';
-      const a = document.createElement('span'); a.textContent = x.name || 'Gäst';
+      const a = document.createElement('span'); a.textContent = x.status === undefined ? x.name : (x.name || '').endsWith('(värd)') ? x.name : nice(x.name);
       const b = document.createElement('span'); b.textContent = LABEL[x.status] || '';
       row.append(a, b); $('guestList').append(row);
     });
@@ -201,7 +239,7 @@
 
   document.querySelectorAll('[data-a]').forEach((b) => b.addEventListener('click', async () => {
     const name = $('name').value.trim();
-    if (!name && !mine.guest) { $('err').textContent = 'Skriv ditt namn först.'; $('name').focus(); return; }
+    if (!name && !mine.guest) { $('err').textContent = $('who').hidden ? 'Skriv ditt namn först.' : 'Tryck på ditt namn först.'; if ($('who').hidden) $('name').focus(); return; }
     $('err').textContent = '';
     document.querySelectorAll('[data-a]').forEach((x) => (x.disabled = true));
     try {
