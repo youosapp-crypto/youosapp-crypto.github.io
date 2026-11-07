@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Du är inbjuden · YOU OS</title>
+<meta name="description" content="Du har fått en inbjudan via YOU OS.">
+<meta property="og:title" content="Du är inbjuden">
+<meta property="og:description" content="Svara och lägg in det i din kalender.">
+<meta property="og:image" content="https://youosapp.com/pebble.png">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#F6F2EC">
+<link rel="icon" href="favicon.png">
+<link rel="apple-touch-icon" href="pebble.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+  :root { --bg:#F6F2EC; --raised:#FFFDFA; --line:#E4DACD; --text:#4A4038; --soft:#8F8780; --aura:#E2C8B0; --auraStrong:#D8B291; --accent:#9C7E62; }
+  * { box-sizing:border-box; }
+  html, body { min-height:100%; }
+  body { margin:0; background:var(--bg); color:var(--text); font-family:'DM Sans',system-ui,sans-serif; line-height:1.55; -webkit-font-smoothing:antialiased; overflow-x:hidden; }
+  .glow { position:fixed; left:50%; top:22%; width:820px; height:820px; transform:translate(-50%,-50%); border-radius:50%;
+          background:radial-gradient(circle, rgba(226,200,176,.5) 0%, rgba(226,200,176,.16) 38%, rgba(246,242,236,0) 68%);
+          animation:glow 9s ease-in-out infinite; pointer-events:none; z-index:0; }
+  @keyframes glow { 0%,100% { opacity:.75; transform:translate(-50%,-50%) scale(1); } 50% { opacity:1; transform:translate(-50%,-50%) scale(1.06); } }
+  main { position:relative; z-index:1; max-width:460px; margin:0 auto; padding:max(40px, env(safe-area-inset-top)) 16px 40px; display:flex; flex-direction:column; align-items:center; text-align:center; }
+  .brand { font-size:13px; letter-spacing:.32em; color:var(--soft); margin:0; }
+  .pebble { width:88px; height:88px; margin:36px 0 22px; animation:breathe 6s ease-in-out infinite; filter:drop-shadow(0 18px 32px rgba(184,150,120,.35)); }
+  .pebble img { width:100%; height:100%; display:block; }
+  @keyframes breathe { 0%,100% { transform:scale(1); } 50% { transform:scale(1.04) translateY(-3px); } }
+  .from { margin:0; font-size:15px; color:var(--soft); }
+  h1 { font-weight:300; font-size:40px; line-height:1.1; letter-spacing:-.03em; margin:6px 0 0; text-wrap:balance; overflow-wrap:anywhere; }
+  .when { margin:12px 0 0; font-size:17px; color:var(--accent); }
+  .where { margin:2px 0 0; font-size:15px; color:var(--soft); }
+  .note { margin:18px 0 0; font-size:15px; background:var(--raised); border:1px solid var(--line); border-radius:18px; padding:14px 16px; text-align:left; width:100%; white-space:pre-wrap; }
+  .rise { opacity:0; transform:translateY(10px); animation:rise .8s cubic-bezier(.2,.7,.2,1) forwards; }
+  .d1 { animation-delay:.1s; } .d2 { animation-delay:.3s; } .d3 { animation-delay:.55s; } .d4 { animation-delay:.8s; }
+  @keyframes rise { to { opacity:1; transform:none; } }
+
+  .reply { width:100%; margin-top:30px; }
+  .field { width:100%; height:52px; border:1px solid var(--line); border-radius:18px; background:rgba(255,253,250,.85); padding:0 18px; font:inherit; font-size:16px; color:var(--text);
+           outline:none; text-align:center; margin-bottom:10px; }
+  .field:focus { border-color:var(--auraStrong); background:var(--raised); }
+  .answers { display:flex; gap:8px; }
+  .answers button { flex:1; height:52px; border-radius:999px; border:1px solid var(--line); background:var(--raised); font:inherit; font-size:16px; font-weight:500; color:var(--text); cursor:pointer;
+                    transition:transform .2s ease, background .25s ease, color .25s ease; }
+  .answers button:active { transform:scale(.97); }
+  .answers button.on { background:var(--text); color:var(--raised); border-color:var(--text); box-shadow:0 10px 30px rgba(74,64,56,.2); }
+  .error { color:#9A5B4E; font-size:14px; min-height:20px; margin:8px 0 0; }
+
+  .after { width:100%; margin-top:6px; }
+  .after p { margin:0 0 14px; color:var(--soft); font-size:15px; }
+  .cal { display:flex; gap:8px; }
+  .cal a { flex:1; display:flex; align-items:center; justify-content:center; height:48px; border-radius:16px; border:1px solid var(--line); background:var(--bg); color:var(--text); text-decoration:none; font-size:15px; }
+
+  .guests { width:100%; margin-top:30px; text-align:left; }
+  .guests h2 { font-size:13px; letter-spacing:.2em; font-weight:400; color:var(--soft); margin:0 0 8px; }
+  .guest { display:flex; justify-content:space-between; padding:9px 0; border-bottom:1px solid var(--line); font-size:15px; }
+  .guest span:last-child { color:var(--soft); }
+
+  .get { width:100%; margin-top:36px; background:var(--raised); border:1px solid var(--line); border-radius:24px; padding:20px; text-align:left; box-shadow:0 18px 50px rgba(74,64,56,.07); }
+  .get b { display:block; font-weight:500; }
+  .get span { color:var(--soft); font-size:14px; }
+  .get a { display:flex; align-items:center; justify-content:center; height:48px; margin-top:14px; border-radius:999px; background:var(--text); color:var(--raised); text-decoration:none; font-weight:500; }
+
+  .empty { margin-top:60px; color:var(--soft); }
+  footer { margin-top:40px; font-size:13px; } footer a { color:var(--soft); text-decoration:none; }
+  [hidden] { display:none !important; }
+  @media (max-width:400px) { h1 { font-size:34px; } }
+  @media (prefers-reduced-motion: reduce) { .glow, .pebble { animation:none; } .rise { animation:none; opacity:1; transform:none; } }
+</style>
+</head>
+<body>
+<div class="glow" aria-hidden="true"></div>
+<main>
+  <p class="brand rise d1">YOU OS</p>
+  <div class="pebble rise d1" aria-hidden="true"><img src="pebble.png" alt=""></div>
+
+  <section id="invite" hidden>
+    <p class="from rise d2" id="from"></p>
+    <h1 class="rise d2" id="title"></h1>
+    <p class="when rise d3" id="when"></p>
+    <p class="where rise d3" id="where" hidden></p>
+    <p class="note rise d3" id="note" hidden></p>
+
+    <div class="reply rise d4" id="reply">
+      <input class="field" id="name" autocomplete="given-name" placeholder="Ditt namn" maxlength="80">
+      <div class="answers">
+        <button type="button" data-a="yes">Ja</button>
+        <button type="button" data-a="maybe">Kanske</button>
+        <button type="button" data-a="no">Nej</button>
+      </div>
+      <p class="error" id="err" role="alert"></p>
+    </div>
+
+    <div class="after" id="after" hidden>
+      <p id="thanks"></p>
+      <div class="cal" id="cal">
+        <a id="ics" download="inbjudan.ics">Lägg i kalendern</a>
+        <a id="gcal" target="_blank" rel="noopener">Google Kalender</a>
+      </div>
+    </div>
+
+    <div class="guests" id="guests" hidden>
+      <h2>VILKA SOM KOMMER</h2>
+      <div id="guestList"></div>
+    </div>
+
+    <div class="get">
+      <b>YOU OS</b>
+      <span>Ditt liv, vackert organiserat på ett ställe. Vi bjuder in några i taget.</span>
+      <a id="getLink" href="/">Skriv upp mig</a>
+    </div>
+  </section>
+
+  <p class="empty" id="empty" hidden>Den här inbjudan finns inte längre.</p>
+  <footer><a href="integritet.html">Integritet</a></footer>
+</main>
+<script>
+  // Visar en inbjudan från YOU OS (funktionerna invite_view och invite_answer i supabase/invites.sql).
+  // Länken är nyckeln: den som har den kan se händelsen och svara. Mejladresser visas aldrig.
+  const API = 'https://api.youosapp.com/rest/v1/rpc/';
+  const KEY = 'sb_publishable_fBfRI-2oFquoHA9F9ype7g_WCByczUN';
+  const H = { apikey: KEY, Authorization: 'Bearer ' + KEY, 'Content-Type': 'application/json' };
+  const id = new URLSearchParams(location.search).get('t') || '';
+  const $ = (x) => document.getElementById(x);
+  const STORE = 'youos-invite-' + id;
+  const LABEL = { yes: 'Kommer', maybe: 'Kanske', no: 'Kan inte', pending: 'Inte svarat' };
+  let inv = null;
+  let mine = {};
+  try { mine = JSON.parse(localStorage.getItem(STORE) || '{}'); } catch {}
+
+  const rpc = (fn, body) => fetch(API + fn, { method: 'POST', headers: H, body: JSON.stringify(body) })
+    .then(async (r) => { const j = await r.json().catch(() => null); if (!r.ok) throw new Error((j && j.message) || 'Något gick fel'); return j; });
+
+  const pad = (n) => String(n).padStart(2, '0');
+  function whenText(s, e, allDay) {
+    const d = s.toLocaleDateString('sv-SE', { weekday: 'long', day: 'numeric', month: 'long' });
+    const day = d.charAt(0).toUpperCase() + d.slice(1);
+    if (allDay) return day;
+    return `${day} · ${pad(s.getHours())}:${pad(s.getMinutes())}–${pad(e.getHours())}:${pad(e.getMinutes())}`;
+  }
+  const utc = (d) => d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+  const ymd = (d) => `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}`;
+  const esc = (s) => String(s || '').replace(/\\/g, '\\\\').replace(/\n/g, '\\n').replace(/[,;]/g, (m) => '\\' + m);
+
+  function calendarLinks() {
+    const s = new Date(inv.starts_at), e = new Date(inv.ends_at);
+    const end1 = new Date(s); end1.setDate(end1.getDate() + 1);
+    const desc = `Inbjudan från ${inv.host_name} via YOU OS` + (inv.note ? `\n\n${inv.note}` : '');
+    const ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//YOU OS//Inbjudan//SV', 'METHOD:PUBLISH', 'BEGIN:VEVENT',
+      `UID:${inv.id}@youosapp.com`, `DTSTAMP:${utc(new Date())}`,
+      inv.all_day ? `DTSTART;VALUE=DATE:${ymd(s)}` : `DTSTART:${utc(s)}`,
+      inv.all_day ? `DTEND;VALUE=DATE:${ymd(end1)}` : `DTEND:${utc(e)}`,
+      `SUMMARY:${esc(inv.title)}`, inv.location ? `LOCATION:${esc(inv.location)}` : '', `DESCRIPTION:${esc(desc)}`,
+      'END:VEVENT', 'END:VCALENDAR'].filter(Boolean).join('\r\n');
+    $('ics').href = 'data:text/calendar;charset=utf-8,' + encodeURIComponent(ics);
+    const dates = inv.all_day ? `${ymd(s)}/${ymd(end1)}` : `${utc(s)}/${utc(e)}`;
+    $('gcal').href = 'https://calendar.google.com/calendar/render?action=TEMPLATE'
+      + '&text=' + encodeURIComponent(inv.title) + '&dates=' + dates
+      + '&details=' + encodeURIComponent(desc) + (inv.location ? '&location=' + encodeURIComponent(inv.location) : '');
+  }
+
+  function render() {
+    $('from').textContent = inv.cancelled ? `${inv.host_name} har ställt in` : `${inv.host_name} bjuder in dig till`;
+    $('title').textContent = inv.title;
+    $('when').textContent = whenText(new Date(inv.starts_at), new Date(inv.ends_at), inv.all_day);
+    if (inv.location) { $('where').textContent = inv.location; $('where').hidden = false; }
+    if (inv.note) { $('note').textContent = inv.note; $('note').hidden = false; }
+    if (mine.name) $('name').value = mine.name;
+    document.querySelectorAll('[data-a]').forEach((b) => b.classList.toggle('on', b.dataset.a === mine.status));
+    $('reply').hidden = !!inv.cancelled;
+    const answered = mine.status && !inv.cancelled;
+    $('after').hidden = !answered;
+    if (answered) {
+      $('thanks').textContent = mine.status === 'no' ? `Tack, ${inv.host_name} ser att du inte kan.` : mine.status === 'yes' ? 'Härligt! Lägg in det i din kalender:' : 'Lägg in det i kalendern så du inte glömmer:';
+      $('cal').hidden = mine.status === 'no';
+    }
+    const g = [{ name: inv.host_name + ' (värd)', status: 'yes' }].concat(inv.guests || []);
+    $('guests').hidden = false;
+    $('guestList').innerHTML = '';
+    g.forEach((x) => {
+      const row = document.createElement('div'); row.className = 'guest';
+      const a = document.createElement('span'); a.textContent = x.name || 'Gäst';
+      const b = document.createElement('span'); b.textContent = LABEL[x.status] || '';
+      row.append(a, b); $('guestList').append(row);
+    });
+    calendarLinks();
+    $('invite').hidden = false;
+  }
+
+  async function load() {
+    if (!/^[0-9a-f-]{36}$/i.test(id)) { $('empty').hidden = false; return; }
+    try {
+      inv = await rpc('invite_view', { p_id: id });
+      if (!inv) { $('empty').hidden = false; return; }
+      render();
+    } catch { $('empty').hidden = false; }
+  }
+
+  document.querySelectorAll('[data-a]').forEach((b) => b.addEventListener('click', async () => {
+    const name = $('name').value.trim();
+    if (!name && !mine.guest) { $('err').textContent = 'Skriv ditt namn först.'; $('name').focus(); return; }
+    $('err').textContent = '';
+    document.querySelectorAll('[data-a]').forEach((x) => (x.disabled = true));
+    try {
+      const guest = await rpc('invite_answer', { p_id: id, p_status: b.dataset.a, p_name: name || null, p_guest: mine.guest || null });
+      mine = { guest, name, status: b.dataset.a };
+      try { localStorage.setItem(STORE, JSON.stringify(mine)); } catch {}
+      inv = await rpc('invite_view', { p_id: id });
+      render();
+    } catch (e) {
+      $('err').textContent = e.message || 'Något gick fel. Försök igen.';
+    } finally {
+      document.querySelectorAll('[data-a]').forEach((x) => (x.disabled = false));
+    }
+  }));
+
+  $('getLink').href = '/?ref=inbjudan';
+  load();
+</script>
+</body>
+</html>

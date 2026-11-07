@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>YOU OS</title>
-<meta name="description" content="Något nytt är på väg. Inte för alla. Inte än.">
+<meta name="description" content="Ditt liv, vackert organiserat på ett ställe.">
 <meta property="og:title" content="YOU OS">
-<meta property="og:description" content="Något nytt är på väg. Inte för alla. Inte än.">
+<meta property="og:description" content="Ditt liv, vackert organiserat på ett ställe.">
 <meta property="og:image" content="https://youosapp.com/pebble.png">
 <meta name="theme-color" content="#F6F2EC">
 <link rel="icon" href="favicon.png">
@@ -34,10 +34,10 @@
   .pebble img { width:100%; height:100%; display:block; }
   @keyframes breathe { 0%,100% { transform:scale(1) translateY(0); } 50% { transform:scale(1.04) translateY(-4px); } }
 
-  h1 { font-weight:300; font-size:44px; line-height:1.08; letter-spacing:-.03em; margin:0; text-wrap:balance; }
+  h1 { font-weight:300; font-size:56px; line-height:1.08; letter-spacing:-.03em; margin:0; text-wrap:balance; }
   h1 .nb { white-space:nowrap; }
   /* Andra raden i samma typsnitt som appen, i den varma accentfärgen. */
-  h1 em { display:block; font-style:normal; font-weight:300; color:#9C7E62; margin-top:2px; }
+  h1 em { display:block; font-style:normal; font-weight:300; color:#9C7E62; font-size:20px; line-height:1.4; letter-spacing:-.01em; margin-top:14px; }
 
   /* Rader som tonar fram en i taget. */
   .rise { opacity:0; transform:translateY(10px); animation:rise .9s cubic-bezier(.2,.7,.2,1) forwards; }
@@ -79,28 +79,27 @@
   footer a:hover { color:var(--text); }
   [hidden] { display:none !important; }
 
-  @media (max-width:420px) { h1 { font-size:36px; } .pebble { width:148px; height:148px; margin:44px 0 32px; } }
+  @media (max-width:420px) { h1 { font-size:46px; } h1 em { font-size:18px; } .pebble { width:148px; height:148px; margin:44px 0 32px; } }
   @media (prefers-reduced-motion: reduce) { .glow, .pebble { animation:none; } .rise { animation:none; opacity:1; transform:none; } }
 </style>
 </head>
 <body>
 <div class="glow" aria-hidden="true"></div>
 <main>
-  <p class="brand rise d1">YOU OS</p>
   <div class="pebble rise d1" aria-hidden="true"><img src="pebble.png" alt=""></div>
 
-  <h1 class="rise d2">Något nytt är <span class="nb">på väg.</span><em>Inte för alla. <span class="nb">Inte än.</span></em></h1>
-  <p class="count rise d3" id="countLine" hidden><b id="count">0</b> står redan i kön</p>
+  <h1 class="rise d2">YOU OS<em>Ditt liv, vackert organiserat på ett ställe.</em></h1>
+  <p class="count rise d3" id="countLine" hidden><b id="count">0</b> står redan på väntelistan</p>
 
   <!-- Waitlisten: förnamn och mejl, sedan "Du är nr 12" och en egen länk att dela. -->
   <section class="join rise d4" id="ask">
     <form id="form" novalidate>
       <input class="field" id="name" name="name" autocomplete="given-name" placeholder="Ditt förnamn" maxlength="80" required>
       <input class="field" id="email" name="email" type="email" autocomplete="email" placeholder="Din mejl" maxlength="200" required>
-      <button class="btn" id="go" type="submit">Begär en inbjudan</button>
+      <button class="btn" id="go" type="submit">Skriv upp mig</button>
       <p class="error" id="err" role="alert"></p>
     </form>
-    <p class="fine">Vi släpper in i små omgångar.</p>
+    <p class="fine">Vi bjuder in några i taget.</p>
   </section>
 
   <section class="done" id="done" hidden>
