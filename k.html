@@ -38,7 +38,7 @@
   .ticket { width:100%; margin-top:36px; background:rgba(255,253,250,.85); border:1px solid var(--line); border-radius:24px; padding:22px 20px 20px;
             box-shadow:0 18px 50px rgba(74,64,56,.07); -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); }
   .ticket .label { margin:0; font-size:12px; letter-spacing:.24em; color:var(--soft); }
-  .ticket .code { margin:6px 0 2px; font-weight:300; font-size:30px; letter-spacing:.14em; }
+  .ticket .code { margin:6px 0 0; font-weight:300; font-size:30px; letter-spacing:.14em; }
   .ticket .from { margin:0; font-size:14px; color:var(--soft); }
 
   .notes { width:100%; margin-top:28px; display:flex; flex-direction:column; gap:10px; }
@@ -76,7 +76,6 @@
     <div class="ticket rise d3">
       <p class="label">DIN KOD</p>
       <p class="code" id="codeShow"></p>
-      <p class="from" id="from">Gäller för en person</p>
     </div>
 
     <!-- Två korta rader i samma typsnitt och ton som resten av sidan. -->
@@ -86,8 +85,7 @@
     </div>
 
     <a class="btn rise d5" id="get" href="https://testflight.apple.com/join/fAdWqBTA">Ladda ner YOU OS</a>
-    <p class="fine rise d5" id="copied">Koden kopieras när du trycker. Klistra in den när appen öppnas.</p>
-    <p class="fine rise d5">Första gången? Hämta <a href="https://apps.apple.com/app/testflight/id899247664">TestFlight</a> från App Store först. Bara iPhone just nu.</p>
+    <p class="fine rise d5">Första gången? Hämta <a href="https://apps.apple.com/app/testflight/id899247664">TestFlight</a> från App Store först.<br>Bara för iPhone just nu.</p>
   </section>
 
   <!-- Koden finns inte eller är slut. -->
@@ -121,7 +119,6 @@
       if (!row || row.ok === false) return showUsed();
       if (row.name) {
         $('hello').firstChild.textContent = row.name + ' har bjudit in dig.';
-        $('from').textContent = 'Från ' + row.name + ' · gäller för en person';
       }
     })
     .catch(() => {});
@@ -129,7 +126,6 @@
   // Koden läggs i urklipp när hon trycker, så att appen kan klistra in den direkt.
   $('get').addEventListener('click', () => {
     try { navigator.clipboard && navigator.clipboard.writeText(code); } catch (e) {}
-    $('copied').textContent = 'Koden ' + code + ' är kopierad. Klistra in den när appen öppnas.';
   });
 </script>
 </body>
