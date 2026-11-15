@@ -148,8 +148,6 @@
     </div>
   </section>
 
-  <p class="countdown rise d5" id="countdown"></p>
-
   <footer>
     <a href="integritet.html" data-t="privacy">Integritet</a>
     <a href="villkor.html" data-t="terms">Villkor</a>
@@ -207,12 +205,6 @@
     document.querySelectorAll('[data-ta]').forEach((el) => { el.setAttribute('aria-label', t(el.dataset.ta)); });
     const meta = document.querySelector('meta[name="description"]'); if (meta) meta.content = t('desc');
     const sw = document.getElementById('langSwitch'); sw.textContent = t('other'); sw.lang = t('otherLang');
-    updateCountdown();
-  }
-  function updateCountdown() {
-    const launch = new Date('2027-01-01T00:00:00+01:00');
-    const days = Math.ceil((launch - new Date()) / 86400000);
-    if (days > 0) document.getElementById('countdown').innerHTML = '<b>' + days + '</b> ' + t('days');
   }
   document.getElementById('langSwitch').addEventListener('click', (e) => {
     e.preventDefault();
