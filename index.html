@@ -101,49 +101,49 @@
   <p class="brand rise d1">YOU OS</p>
   <div class="pebble rise d1" aria-hidden="true"><img src="pebble.png" alt=""></div>
 
-  <h1 class="rise d2">Ditt liv, vackert <span class="nb">organiserat.</span><em>Bli en av de första.</em></h1>
-  <p class="count rise d3" id="countLine" hidden><b id="count">0</b> står redan på väntelistan</p>
+  <h1 class="rise d2" data-th="h1">Ditt liv, vackert <span class="nb">organiserat.</span><em>Bli en av de första.</em></h1>
+  <p class="count rise d3" id="countLine" hidden><b id="count">0</b> <span data-t="count">står redan på väntelistan</span></p>
 
   <!-- Waitlisten: förnamn och mejl, sedan "Du är nr 12" och en egen länk att dela. -->
   <section class="join rise d4" id="ask">
     <form id="form" novalidate>
-      <input class="field" id="name" name="name" autocomplete="given-name" placeholder="Namn" maxlength="80" required>
-      <input class="field" id="email" name="email" type="email" autocomplete="email" placeholder="Mail" maxlength="200" required>
-      <button class="btn" id="go" type="submit">Jag vill vara med</button>
+      <input class="field" id="name" name="name" autocomplete="given-name" placeholder="Namn" data-tp="name" maxlength="80" required>
+      <input class="field" id="email" name="email" type="email" autocomplete="email" placeholder="Mail" data-tp="email" maxlength="200" required>
+      <button class="btn" id="go" type="submit" data-t="go">Jag vill vara med</button>
       <p class="error" id="err" role="alert"></p>
     </form>
-    <p class="fine">Platserna släpps i omgångar.</p>
+    <p class="fine" data-t="rounds">Platserna släpps i omgångar.</p>
     <!-- Har hon fått en kod av någon: kolla den, och visa sedan hur man laddar ner appen. -->
     <div class="invited">
-      <button type="button" class="linkBtn" id="codeToggle">Har du fått en kod?</button>
+      <button type="button" class="linkBtn" id="codeToggle" data-t="hasCode">Har du fått en kod?</button>
       <form id="codeForm" class="codeForm" novalidate hidden>
-        <input class="field code" id="code" placeholder="Din kod" autocapitalize="characters" autocomplete="off" autocorrect="off" spellcheck="false" maxlength="20">
-        <button class="btn" id="codeGo" type="submit">Kolla koden</button>
+        <input class="field code" id="code" placeholder="Din kod" data-tp="code" autocapitalize="characters" autocomplete="off" autocorrect="off" spellcheck="false" maxlength="20">
+        <button class="btn" id="codeGo" type="submit" data-t="checkCode">Kolla koden</button>
         <p class="error" id="codeErr" role="alert"></p>
       </form>
       <div class="codeOk" id="codeOk" hidden>
-        <b>Koden fungerar 🤍</b>
+        <b data-t="codeOk">Koden fungerar 🤍</b>
         <ol>
-          <li>Ladda ner appen TestFlight från App Store.</li>
-          <li>Tryck på knappen nedan och installera YOU OS.</li>
-          <li>Skriv in din kod <span id="codeShow"></span> när appen öppnas.</li>
+          <li data-t="step1">Ladda ner appen TestFlight från App Store.</li>
+          <li data-t="step2">Tryck på knappen nedan och installera YOU OS.</li>
+          <li><span data-t="step3a">Skriv in din kod</span> <span id="codeShow"></span> <span data-t="step3b">när appen öppnas.</span></li>
         </ol>
-        <a class="btn" href="https://testflight.apple.com/join/fAdWqBTA">Ladda ner YOU OS</a>
-        <p class="fine" style="margin-top:12px">Bara för iPhone just nu.</p>
+        <a class="btn" href="https://testflight.apple.com/join/fAdWqBTA" data-t="download">Ladda ner YOU OS</a>
+        <p class="fine" style="margin-top:12px" data-t="iphone">Bara för iPhone just nu.</p>
       </div>
     </div>
   </section>
 
   <section class="done" id="done" hidden>
-    <p class="label">DIN PLATS</p>
+    <p class="label" data-t="yourPlace">DIN PLATS</p>
     <div class="place" id="place">–</div>
-    <p id="doneText">Vi hör av oss när det är din tur.</p>
+    <p id="doneText" data-t="hearBack">Vi hör av oss när det är din tur.</p>
     <div class="ticket">
-      <b>Tipsa någon som borde vara med</b>
-      <span>Din egen länk. Den som ställer sig i kön via den syns som tipsad av dig.</span>
+      <b data-t="tip">Tipsa någon som borde vara med</b>
+      <span data-t="tipText">Din egen länk. Den som ställer sig i kön via den syns som tipsad av dig.</span>
       <div class="share">
-        <input class="field" id="link" readonly aria-label="Din länk">
-        <button type="button" id="copy">Kopiera</button>
+        <input class="field" id="link" readonly aria-label="Din länk" data-ta="yourLink">
+        <button type="button" id="copy" data-t="copy">Kopiera</button>
       </div>
     </div>
   </section>
@@ -151,12 +151,78 @@
   <p class="countdown rise d5" id="countdown"></p>
 
   <footer>
-    <a href="integritet.html">Integritet</a>
-    <a href="villkor.html">Villkor</a>
-    <a href="mailto:youosapp@gmail.com">Kontakt</a>
+    <a href="integritet.html" data-t="privacy">Integritet</a>
+    <a href="villkor.html" data-t="terms">Villkor</a>
+    <a href="mailto:youosapp@gmail.com" data-t="contact">Kontakt</a>
+    <a href="#" id="langSwitch" lang="en">English</a>
   </footer>
 </main>
 <script>
+  // Språk: svenska för den som har telefonen på svenska och befinner sig i Sverige (svensk tidszon).
+  // Alla andra får engelska. ?lang=sv eller ?lang=en, eller länken längst ner, väljer själv (och sparas).
+  const T = {
+    sv: {
+      h1: 'Ditt liv, vackert <span class="nb">organiserat.</span><em>Bli en av de första.</em>',
+      count: 'står redan på väntelistan', name: 'Namn', email: 'Mail', go: 'Jag vill vara med', wait: 'Ett ögonblick …',
+      rounds: 'Platserna släpps i omgångar.', hasCode: 'Har du fått en kod?', code: 'Din kod', checkCode: 'Kolla koden',
+      codeOk: 'Koden fungerar 🤍', step1: 'Ladda ner appen TestFlight från App Store.', step2: 'Tryck på knappen nedan och installera YOU OS.',
+      step3a: 'Skriv in din kod', step3b: 'när appen öppnas.', download: 'Ladda ner YOU OS', iphone: 'Bara för iPhone just nu.',
+      yourPlace: 'DIN PLATS', hearBack: 'Vi hör av oss när det är din tur.', ahead: (n) => n + ' före dig. Vi hör av oss när det är din tur.',
+      no: 'nr ', tip: 'Tipsa någon som borde vara med', tipText: 'Din egen länk. Den som ställer sig i kön via den syns som tipsad av dig.',
+      yourLink: 'Din länk', copy: 'Kopiera', copied: 'Kopierad', privacy: 'Integritet', terms: 'Villkor', contact: 'Kontakt',
+      days: 'DAGAR KVAR', badCode: 'Den koden finns inte, eller är redan använd.', codeFail: 'Det gick inte att kolla koden just nu. Prova igen.',
+      noName: 'Skriv ditt namn.', badMail: 'Den mailen ser inte riktigt rätt ut.', fail: 'Något gick snett. Försök igen om en stund.',
+      desc: 'Ditt liv, vackert organiserat på ett ställe.', other: 'English', otherLang: 'en'
+    },
+    en: {
+      h1: 'Your life, beautifully <span class="nb">organized.</span><em>Be one of the first.</em>',
+      count: 'already on the waitlist', name: 'Name', email: 'Email', go: 'I want in', wait: 'One moment …',
+      rounds: 'Spots open in small rounds.', hasCode: 'Got an invite code?', code: 'Your code', checkCode: 'Check code',
+      codeOk: 'Your code works 🤍', step1: 'Download TestFlight from the App Store.', step2: 'Tap the button below and install YOU OS.',
+      step3a: 'Enter your code', step3b: 'when the app opens.', download: 'Download YOU OS', iphone: 'iPhone only for now.',
+      yourPlace: 'YOUR SPOT', hearBack: "We'll be in touch when it's your turn.", ahead: (n) => n + " ahead of you. We'll be in touch when it's your turn.",
+      no: 'no. ', tip: 'Tell someone who should be here', tipText: 'Your own link. Anyone who joins through it shows up as invited by you.',
+      yourLink: 'Your link', copy: 'Copy', copied: 'Copied', privacy: 'Privacy', terms: 'Terms', contact: 'Contact',
+      days: 'DAYS TO GO', badCode: "That code doesn't exist, or it's already been used.", codeFail: "Couldn't check the code right now. Try again.",
+      noName: 'Write your name.', badMail: "That email doesn't look quite right.", fail: 'Something went wrong. Try again in a moment.',
+      desc: 'Your life, beautifully organized in one place.', other: 'Svenska', otherLang: 'sv'
+    }
+  };
+  function pickLang() {
+    const q = new URLSearchParams(location.search).get('lang');
+    if (q === 'sv' || q === 'en') return q;
+    try { const saved = localStorage.getItem('youos-lang'); if (saved === 'sv' || saved === 'en') return saved; } catch (e) {}
+    const lang = ((navigator.languages && navigator.languages[0]) || navigator.language || '').toLowerCase();
+    let tz = '';
+    try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (e) {}
+    return lang.startsWith('sv') && (tz === 'Europe/Stockholm' || tz === '') ? 'sv' : 'en';
+  }
+  let L = pickLang();
+  const t = (k) => T[L][k];
+  function applyLang() {
+    document.documentElement.lang = L;
+    document.querySelectorAll('[data-t]').forEach((el) => { el.textContent = t(el.dataset.t); });
+    document.querySelectorAll('[data-th]').forEach((el) => { el.innerHTML = t(el.dataset.th); });
+    document.querySelectorAll('[data-tp]').forEach((el) => { el.placeholder = t(el.dataset.tp); });
+    document.querySelectorAll('[data-ta]').forEach((el) => { el.setAttribute('aria-label', t(el.dataset.ta)); });
+    const meta = document.querySelector('meta[name="description"]'); if (meta) meta.content = t('desc');
+    const sw = document.getElementById('langSwitch'); sw.textContent = t('other'); sw.lang = t('otherLang');
+    updateCountdown();
+  }
+  function updateCountdown() {
+    const launch = new Date('2027-01-01T00:00:00+01:00');
+    const days = Math.ceil((launch - new Date()) / 86400000);
+    if (days > 0) document.getElementById('countdown').innerHTML = '<b>' + days + '</b> ' + t('days');
+  }
+  document.getElementById('langSwitch').addEventListener('click', (e) => {
+    e.preventDefault();
+    L = L === 'sv' ? 'en' : 'sv';
+    try { localStorage.setItem('youos-lang', L); } catch (err) {}
+    applyLang();
+    const saved = (() => { try { return JSON.parse(localStorage.getItem('youos-waitlist') || 'null'); } catch (err) { return null; } })();
+    if (saved && saved.place) show(saved);
+  });
+
   // Skickar namn och mejl till Supabase (funktionen join_waitlist i supabase/waitlist.sql).
   // Nyckeln är den publika, samma som appen använder. Den kan bara ställa någon i kön, inte läsa listan.
   const API = 'https://api.youosapp.com/rest/v1/rpc/';
@@ -185,30 +251,29 @@
         $('codeToggle').hidden = true;
         $('codeOk').hidden = false;
       } else {
-        $('codeErr').textContent = 'Den koden finns inte, eller är redan använd.';
+        $('codeErr').textContent = t('badCode');
       }
     } catch {
-      $('codeErr').textContent = 'Det gick inte att kolla koden just nu. Prova igen.';
+      $('codeErr').textContent = t('codeFail');
     }
     $('codeGo').disabled = false;
   });
 
-  // Nedräkning till släppet 1 januari 2027.
-  const launch = new Date('2027-01-01T00:00:00+01:00');
-  const days = Math.ceil((launch - new Date()) / 86400000);
-  if (days > 0) $('countdown').innerHTML = '<b>' + days + '</b> DAGAR KVAR';
+  // Översätt sidan (och nedräkningen till släppet 1 januari 2027).
+  applyLang();
 
   // Hur många som står i kön. Syns först när det är fler än 25, så att en tom kö inte känns tom.
   fetch(API + 'waitlist_size', { method: 'POST', headers: H, body: '{}' })
     .then((r) => (r.ok ? r.json() : null))
-    .then((n) => { if (typeof n === 'number' && n >= 25) { $('count').textContent = n.toLocaleString('sv-SE'); $('countLine').hidden = false; } })
+    .then((n) => { if (typeof n === 'number' && n >= 25) { $('count').textContent = n.toLocaleString(L === 'sv' ? 'sv-SE' : 'en-GB'); $('countLine').hidden = false; } })
     .catch(() => {});
 
   function show(row) {
     $('ask').hidden = true;
     $('done').hidden = false;
-    $('place').textContent = 'nr ' + row.place;
-    if (row.ahead_of_you > 0) $('doneText').textContent = row.ahead_of_you + ' före dig. Vi hör av oss när det är din tur.';
+    $('place').textContent = t('no') + row.place;
+    $('doneText').textContent = t('hearBack');
+    if (row.ahead_of_you > 0) $('doneText').textContent = t('ahead')(row.ahead_of_you);
     $('link').value = 'https://youosapp.com/?ref=' + row.ref_code;
     try { localStorage.setItem('youos-waitlist', JSON.stringify(row)); } catch (e) {}
   }
@@ -221,10 +286,10 @@
     const name = $('name').value.trim();
     const email = $('email').value.trim();
     $('err').textContent = '';
-    if (!name) { $('err').textContent = 'Skriv ditt namn.'; return; }
-    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { $('err').textContent = 'Den mailen ser inte riktigt rätt ut.'; return; }
+    if (!name) { $('err').textContent = t('noName'); return; }
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { $('err').textContent = t('badMail'); return; }
     $('go').disabled = true;
-    $('go').textContent = 'Ett ögonblick …';
+    $('go').textContent = t('wait');
     try {
       const res = await fetch(API + 'join_waitlist', { method: 'POST', headers: H, body: JSON.stringify({ p_name: name, p_email: email, p_ref: ref || null }) });
       if (!res.ok) throw new Error(res.status);
@@ -232,14 +297,14 @@
       if (!rows || !rows[0]) throw new Error('empty');
       show(rows[0]);
     } catch (e) {
-      $('err').textContent = 'Något gick snett. Försök igen om en stund.';
+      $('err').textContent = t('fail');
       $('go').disabled = false;
-      $('go').textContent = 'Jag vill vara med';
+      $('go').textContent = t('go');
     }
   });
 
   $('copy').addEventListener('click', async () => {
-    try { await navigator.clipboard.writeText($('link').value); $('copy').textContent = 'Kopierad'; }
+    try { await navigator.clipboard.writeText($('link').value); $('copy').textContent = t('copied'); }
     catch (e) { $('link').select(); }
   });
 </script>
